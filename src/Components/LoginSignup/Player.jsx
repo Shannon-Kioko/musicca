@@ -4,6 +4,7 @@ import router from '../../routes/routes/routes'
 
 function Player() {
   return (
+    
     <div><Link to={'/'}>Player</Link></div>
   )
 }
