@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Logger />} />
         <Route path="/signup" element={<Signer />} />
-        <Route path="/login" element={<AuthForm action="Login" />} />
+        <Route path="/login" element={<Logger />} />
       </Routes>
     </Router>
   );
