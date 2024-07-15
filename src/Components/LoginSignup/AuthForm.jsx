@@ -5,39 +5,37 @@ import password_icon from "../Assets/padlock.png";
 import back from "../Assets/back.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { object, string, } from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const AuthForm = ({ action, forgotPassword }) => {
-  // local state management with useState
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // form state management with react-hook-form
+  const userSchema = object().shape({
+    userName: action ==="Sign Up" ? string().required("Username is required").min(3, "Username must be at least 3 characters") : string(),
+    email: string().email("Enter a valid email address").required("Email is required!"),
+    password: string().required("Password is required!").min(4, "Password must be at least 4 characters").max(6, "Password must be at most 6 characters"),
+  });
+
   const {
     register,
     handleSubmit,
     reset,
-    getValues,
     formState: { errors, isSubmitSuccessful },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(userSchema),
+  });
 
   const onSubmit = (data) => {
-    console.log("Submit");
     alert(JSON.stringify(data));
-    console.log( "cvals",getValues())
-    console.log(data)
-    };
+  };
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({
-        userName: "",
-        email: "",
-        password: "",
-      });
+      reset();
     }
   }, [isSubmitSuccessful, reset]);
+
   const handleForgotPassword = () => {
     console.log("Forgot Password");
   };
@@ -45,8 +43,6 @@ const AuthForm = ({ action, forgotPassword }) => {
   const handleBack = () => {
     navigate(-1);
   };
-
-  console.log({ action });
 
   return (
     <div className="container">
@@ -63,57 +59,45 @@ const AuthForm = ({ action, forgotPassword }) => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="inputs">
-          {action === "Login" ? (
-            <div></div>
-          ) : (
+          {action !== "Login" && (
             <>
               <div className="input">
                 <img src={user_icon} className="icon" alt="User Icon" />
                 <input
-                  aria-invalid={errors.userName ? "true" : "false"}
-                  {...register("userName", { minLength: 2, required: true })}
-                  // defaultValue prop by react-hook-form binds state to the form inputs
-                  defaultValue={userName}
+                  {...register("userName")}
                   type="text"
                   placeholder="Username"
-                  onChange={(e) => setUserName(e.target.value)}
                 />
               </div>
-
-              {errors.password && (
-                <span className="errors">{errors.password.message}</span>
+              {errors.userName && (
+                <span className="errors">{errors.userName.message}</span>
               )}
-              {console.log(errors)}
             </>
           )}
 
           <div className="input">
             <img src={email_icon} className="icon" alt="Email Icon" />
             <input
-              {...register("email", { minLength: 2, required: true })}
-              defaultValue={email}
+              {...register("email")}
               type="email"
               placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="input">
-            <img src={password_icon} className="icon" alt="Password icon" />
+          {errors.email && (
+            <span className="errors">{errors.email.message}</span>
+          )}
 
+          <div className="input">
+            <img src={password_icon} className="icon" alt="Password Icon" />
             <input
-              {...register("password", {
-                minLength: {
-                  value: 4,
-                  message: "Must have at least 4 characters",
-                },
-                required: "You must enter password",
-              })}
-              defaultValue={password}
+              {...register("password")}
               type="password"
               placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          {errors.password && (
+            <span className="errors">{errors.password.message}</span>
+          )}
         </div>
         {action === "Sign Up" ? (
           <div></div>
@@ -133,11 +117,8 @@ const AuthForm = ({ action, forgotPassword }) => {
             </div>
           )}
 
-          <div
-            className="submit-container submit"
-            onClick={handleSubmit(onSubmit)}
-          >
-            {action === "Sign Up" ? "Sign Up" : "Log In"}
+          <div className="submit-container submit">
+            <button type="submit">{action === "Sign Up" ? "Sign Up" : "Log In"}</button>
           </div>
         </div>
       </form>

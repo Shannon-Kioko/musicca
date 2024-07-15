@@ -1,7 +1,7 @@
 import React from "react";
-import AuthForm from "./Authform";
+import AuthForm from "./AuthForm";
 
-function Signer() {
+function Signer({ setToken }) {
   return (
     
   <AuthForm action={"Sign Up"} />

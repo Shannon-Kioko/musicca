@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './Components/LoginSignup/LoginSignup.css';
-import AuthForm from './Components/LoginSignup/Authform';
 import Logger from './Components/LoginSignup/Logger';
 import Signer from './Components/LoginSignup/Signer';
 

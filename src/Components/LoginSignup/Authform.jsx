@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { checkPropTypes } from "prop-types";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import email_icon from "../Assets/email.png";
 import user_icon from "../Assets/user.png";
 import password_icon from "../Assets/padlock.png";
 import back from "../Assets/back.png";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 
-const AuthForm = ({ action, forgotPassword }) => {
+const AuthForm = ({ action, setToken }) => {
   // local state management with useState
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
@@ -71,7 +72,7 @@ const AuthForm = ({ action, forgotPassword }) => {
                 <img src={user_icon} className="icon" alt="User Icon" />
                 <input
                   aria-invalid={errors.userName ? "true" : "false"}
-                  {...register("userName", { minLength: 2, required: true })}
+                  {...register("userName")}
                   // defaultValue prop by react-hook-form binds state to the form inputs
                   defaultValue={userName}
                   type="text"
@@ -90,7 +91,7 @@ const AuthForm = ({ action, forgotPassword }) => {
           <div className="input">
             <img src={email_icon} className="icon" alt="Email Icon" />
             <input
-              {...register("email", { minLength: 2, required: true })}
+              {...register("email")}
               defaultValue={email}
               type="email"
               placeholder="Email"
@@ -101,13 +102,7 @@ const AuthForm = ({ action, forgotPassword }) => {
             <img src={password_icon} className="icon" alt="Password icon" />
 
             <input
-              {...register("password", {
-                minLength: {
-                  value: 4,
-                  message: "Must have at least 4 characters",
-                },
-                required: "You must enter password",
-              })}
+              {...register("password")}
               defaultValue={password}
               type="password"
               placeholder="Password"
@@ -143,6 +138,11 @@ const AuthForm = ({ action, forgotPassword }) => {
       </form>
     </div>
   );
+};
+
+AuthForm.checkPropTypes = {
+  action: checkPropTypes.string,
+  setToken: checkPropTypes.func.isRequired,
 };
 
 export default AuthForm;

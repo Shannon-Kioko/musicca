@@ -29,10 +29,11 @@ body {
 .errors {
     color: gray;
     background-color: #FFADB0;
-    background-size: content;
+    background-size: auto;
     background-position: center;
     margin: auto;
-    border-radius: 6%;
+    /* border-radius: 2%; */
+    padding: 1%;
 }
 
 .header {
